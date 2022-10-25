@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import Global from '../Global'
+import Global from '../../Global';
+import MaestroEmpleado from './MaestroEmpleado';
 
-export default class DepartamentosEmpleados extends Component {
+export default class MaestroDepartamento extends Component {
   state={
     options:[],
     status:false,
-    options2:[]
+    idDepartamento:0
   }
   cajaselect=React.createRef();
   loadSelect=()=>{
@@ -21,19 +22,14 @@ export default class DepartamentosEmpleados extends Component {
   }
   cargarEmpleados = (e) =>{
     e.preventDefault();
-    var request2="https://apiempleadosfullstack.azurewebsites.net/api/Empleados/EmpleadosDepartamento/";
     var emple=this.cajaselect.current.value;
     console.log(emple)
-    axios.get(request2+emple).then(res=>{
-      console.log(res.data)
-      console.log(res.data)
-      this.setState({
-        options2: res.data,
-        
-        
-      })
-  })
+    this.setState({
+        idDepartamento: emple
+    })
+    
   }
+  
 
   componentDidMount=()=>{
     this.loadSelect();
@@ -42,7 +38,7 @@ export default class DepartamentosEmpleados extends Component {
     return (
       <div>
 
-        <h1>DepartamentosEmpleados</h1>
+        <h1 style={{color:"blue"}}>DepartamentosEmpleados</h1>
         <form onSubmit={this.cargarEmpleados}> 
           <button>PULSAR</button>
             <select  ref={this.cajaselect}>
@@ -53,16 +49,12 @@ export default class DepartamentosEmpleados extends Component {
                   })
               }
             </select>
-            <ul>
-              {
+            <h2>Departamento seleccionado: {this.state.idDepartamento}</h2>
 
-                  this.state.options2.map((dept,index)=>{
-                    return(<li>{dept.apellido}</li>)
-                  })
-              }
-              
-            </ul>
-
+           {
+                this.state.idDepartamento !=0 &&
+                    <MaestroEmpleado iddepartamento={this.state.idDepartamento}/>
+           }
 
         </form>
          
